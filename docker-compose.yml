@@ -1,0 +1,30 @@
+version: "3.4"
+services:
+    front:
+      build:
+        context: ./
+        dockerfile: ./docker/Dockerfile
+        args:
+          FRONT_APPNAME: ${FRONT_APPNAME}
+          SHARED_FRONT_WORKSPACE_HOST: ${SHARED_FRONT_WORKSPACE_HOST}
+          SHARED_FRONT_WORKSPACE_CONTAINER: ${SHARED_FRONT_WORKSPACE_CONTAINER}
+          NODE_VERSION: ${NODE_VERSION}
+      image: ${FRONT_APPNAME}
+      container_name: ${FRONT_APPNAME}
+      # command: sh -c "cd chateng-front && npm run serve -- --port 8080"
+      ports:
+        # フロントエンドlocalhost用
+        - 8080:8080
+        # webpack-bundle-analyzer用
+        - 8765:8765
+      volumes:
+        - ./${SHARED_FRONT_WORKSPACE_HOST}:${SHARED_FRONT_WORKSPACE_CONTAINER}
+        # ---------------------------------------------------------------------------
+        # コンテナ側のnode_modulesディレクトリをホスト側に持ってこないようにする．
+        # https://stackoverflow.com/a/37898591
+        # なんかディレクトリ作られるけど，中身はホストへ共有されてない．まぁいいか…？
+        # でもこれをすると，ホスト側の開発でエラーの赤波線が出てしまう…
+        # - ${SHARED_WORKSPACE_CONTAINER}/frontend/node_modules/
+        # - ${SHARED_WORKSPACE_CONTAINER}/backend/node_modules/
+        # ---------------------------------------------------------------------------
+      tty: true
