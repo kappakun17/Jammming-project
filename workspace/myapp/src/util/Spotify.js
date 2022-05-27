@@ -1,4 +1,4 @@
-const clientId = '9a5d59ceed5847a79b1b1115e0b5b8fb';
+const clientId = '';
 const redirectUri = 'http://localhost:8080/callback';
 const spotifyUrl = `https://accounts.spotify.com/authorize?response_type=token&scope=playlist-modify-public&client_id=${clientId}&redirect_uri=${redirectUri}`;
 let accessToken = undefined;
